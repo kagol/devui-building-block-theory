@@ -66,7 +66,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "devui-building-block-theory:build"
+            "browserTarget": "devui-building-block-theory:build",
+            "port": 4260
           },
           "configurations": {
             "production": {
@@ -123,6 +124,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "devui-building-block-theory"
+    }
+  },
+  "defaultProject": "devui-building-block-theory",
+  "cli": {
+    "analytics": false
+  }
 }
