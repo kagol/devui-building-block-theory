@@ -32,7 +32,12 @@ export class AppComponent implements OnInit, OnDestroy {
     };
   }
   ngOnInit(): void {
-    console.log('Welcome to use DevUI~');
+    console.log(`DevUI是一支兼具设计视角和工程视角的团队，\n服务于华为云DevCloud平台和华为内部数个中后台系统，\n服务于设计师和前端工程师。\n
+    官方网站：https://devui.design\n
+    Ng组件库：https://github.com/DevCloudFE/ng-devui（欢迎Star）\n
+    官方交流：添加DevUI小助手（devui-official）\n
+    DevUIHelper插件：DevUIHelper-LSP（欢迎Star）`);
+    console.log('我们是DevUI团队，\n欢迎来这里和我们一起打造优雅高效的人机设计/研发体系。\n招聘邮箱：muyang2@huawei.com。');
     this.version = VERSION.full;
     this.versionOptions = [
       { name: this.version, link: '/components/get-start', target: '_self' },
