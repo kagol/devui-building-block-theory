@@ -6,6 +6,6 @@ fs.stat('./result', (error, stats) => {
     fs.mkdirSync('./result');
   }
 
-  tar.c(null, ['dist', './scripts/deploy-devui.js'])
+  tar.c({ gzip: true }, ['dist', './scripts/deploy-devui.js'])
   .pipe(fs.createWriteStream('./result/devui.tar.gz'));
 });
