@@ -10,5 +10,6 @@ const dest = '/usr/local/nginx/html';
 fs.stat(target, (error, stats) => {
   if (stats && stats.isFile()) {
     shell.exec(`tar zxvf ${target} -C ${dest}`);
+    shell.exec(`mv ${dest}/dist/* ${dest}`);
   }
 });
