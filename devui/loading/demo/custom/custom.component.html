@@ -1,0 +1,9 @@
+<section>
+  <d-button (click)="fetchCustomLoading()">click me!</d-button>
+  <div dLoading [loading]="loading2" [loadingTemplateRef]="loadingTemplateRef" [style.height.px]="150"></div>
+  <ng-template #loadingTemplateRef>
+    <div class="devui-loading-demo">
+      <div class="custom-loader"></div>
+    </div>
+  </ng-template>
+</section>

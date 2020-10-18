@@ -1,0 +1,195 @@
+<div class="devui-data-table {{ cssClass }}">
+  <div class="devui-table-view" #tableView>
+    <div
+      *ngIf="fixHeader"
+      #fixHeaderContainerRef
+      class="table-wrap"
+      [style.overflow-x]="'hidden'"
+      [style.overflow-y]="'scroll'"
+      [style.max-height]="maxHeight ? maxHeight : null"
+      [style.max-width]="maxWidth ? maxWidth : null"
+      [style.width]="!maxWidth ? tableWidth : null"
+    >
+      <table
+        class="devui-table {{ borderType ? 'table-' + borderType : '' }} {{ fixHeader ? 'table-fix-header' : '' }} {{
+          headerBg ? 'header-bg' : ''
+        }} {{ striped ? 'table-striped' : '' }}"
+        [style.table-layout]="tableLayout"
+      >
+        <colgroup>
+          <col *ngFor="let config of tableWidthConfig" [style.width]="config.width" />
+        </colgroup>
+        <ng-container *ngTemplateOutlet="HeaderContent"></ng-container>
+        <ng-template *ngIf="!innerHeader" [ngTemplateOutlet]="headerTpl"></ng-template>
+      </table>
+    </div>
+
+    <div
+      cdkScrollable
+      dLazyLoad
+      [enableLazyLoad]="lazy"
+      (loadMore)="onLoadMore($event)"
+      *ngIf="!virtualScroll; else scrollViewTpl"
+      class="devui-scrollbar"
+      [ngClass]="{ 'scroll-view': scrollable, 'table-wrap': !fixHeader }"
+      [style.height]="tableHeight ? tableHeight : null"
+      [style.max-height]="maxHeight ? maxHeight : null"
+      [style.max-width]="maxWidth ? maxWidth : null"
+      [style.width]="!maxWidth ? tableWidth : null"
+      (scroll)="onBodyScroll($event)"
+      [style.overflow-y]="fixHeader ? 'scroll' : null"
+    >
+      <table
+        #tableBody
+        class="devui-table {{ borderType ? 'table-' + borderType : '' }} {{ rowHoveredHighlight ? 'table-hover' : '' }} {{
+          headerBg ? 'header-bg' : ''
+        }} {{ striped ? 'table-striped' : '' }}"
+        [style.table-layout]="tableLayout"
+        [style.height]="minHeight ? minHeight : null"
+      >
+        <colgroup>
+          <col *ngFor="let config of tableWidthConfig" [style.width]="config.width" />
+        </colgroup>
+        <ng-container *ngIf="!fixHeader">
+          <ng-container *ngTemplateOutlet="HeaderContent"></ng-container>
+          <ng-template *ngIf="!innerHeader" [ngTemplateOutlet]="headerTpl"></ng-template>
+        </ng-container>
+        <tbody
+          dTableBody
+          dSortable
+          *ngIf="innerBody"
+          [dataSource]="dataSource"
+          [tableWidthConfig]="tableWidthConfig"
+          [rowTemplete]="innerBody.rowTempleteForSelect"
+          [minHeight]="minHeight"
+          [minHeightStretchRow]="innerBody.minHeightStretchRow"
+        ></tbody>
+        <tbody
+          *ngIf="!innerBody"
+          dDataTableBody
+          [dataSource]="dataSource"
+          [resizeable]="resizeable"
+          [columns]="_columns"
+          [checkable]="checkable"
+          [allChecked]="_pageAllChecked"
+          [selectable]="selectable"
+          [editModel]="editModel"
+          [editRowItem]="editRowItem"
+          [showExpandToggle]="showExpandToggle"
+          [detailTemplateRef]="detailTemplateRef"
+          [timeout]="timeout"
+          [type]="type"
+          [rowHoveredHighlight]="rowHoveredHighlight"
+          [tableLevel]="tableLevel"
+          [tableWidthConfig]="tableWidthConfig"
+          [headerExpandConfig]="headerExpandConfig"
+          [generalRowHoveredData]="generalRowHoveredData"
+        ></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="!dataSource?.length && noResultTemplate != null">
+  <ng-template [ngTemplateOutlet]="noResultTemplate" [ngTemplateOutletContext]="{ $implicit: this }"></ng-template>
+</ng-container>
+
+<ng-template #scrollViewTpl>
+  <cdk-virtual-scroll-viewport
+    dLazyLoad
+    [enableLazyLoad]="lazy"
+    (loadMore)="onLoadMore($event)"
+    [itemSize]="virtualItemSize"
+    [minBufferPx]="virtualMinBufferPx"
+    [maxBufferPx]="virtualMaxBufferPx"
+    class="devui-scrollbar viewport-wrapper"
+    [ngClass]="{ 'scroll-view': scrollable, 'virtual-scroll-wrap': !fixHeader }"
+    [style.height]="tableHeight ? tableHeight : maxHeight"
+    [style.max-height]="maxHeight ? maxHeight : null"
+    [style.max-width]="maxWidth ? maxWidth : null"
+    [style.width]="!maxWidth ? tableWidth : null"
+    [style.overflow-y]="fixHeader ? 'scroll' : null"
+    (scroll)="onBodyScroll($event)"
+  >
+    <table
+      #tableBody
+      class="devui-table {{ borderType ? 'table-' + borderType : '' }} {{ rowHoveredHighlight ? 'table-hover' : '' }} {{
+        headerBg ? 'header-bg' : ''
+      }} {{ striped ? 'table-striped' : '' }}"
+      [style.table-layout]="tableLayout"
+      [style.height]="minHeight ? minHeight : null"
+    >
+      <colgroup>
+        <col *ngFor="let config of tableWidthConfig" [style.width]="config.width" />
+      </colgroup>
+      <ng-container *ngIf="!fixHeader">
+        <ng-container *ngTemplateOutlet="HeaderContent"></ng-container>
+        <ng-template *ngIf="!innerHeader" [ngTemplateOutlet]="headerTpl"></ng-template>
+      </ng-container>
+      <tbody
+        dTableBody
+        dSortable
+        *ngIf="innerBody"
+        [dataSource]="dataSource"
+        [tableWidthConfig]="tableWidthConfig"
+        [virtualScroll]="virtualScroll"
+        [rowTemplete]="innerBody.rowTempleteForSelect"
+        [minHeight]="minHeight"
+        [minHeightStretchRow]="innerBody.minHeightStretchRow"
+      ></tbody>
+      <tbody
+        *ngIf="!innerBody"
+        dDataTableBody
+        [dataSource]="dataSource"
+        [resizeable]="resizeable"
+        [columns]="_columns"
+        [checkable]="checkable"
+        [allChecked]="_pageAllChecked"
+        [selectable]="selectable"
+        [editModel]="editModel"
+        [editRowItem]="editRowItem"
+        [showExpandToggle]="showExpandToggle"
+        [detailTemplateRef]="detailTemplateRef"
+        [timeout]="timeout"
+        [type]="type"
+        [rowHoveredHighlight]="rowHoveredHighlight"
+        [tableLevel]="tableLevel"
+        [virtualScroll]="virtualScroll"
+        [tableWidthConfig]="tableWidthConfig"
+        [headerExpandConfig]="headerExpandConfig"
+        [generalRowHoveredData]="generalRowHoveredData"
+      ></tbody>
+    </table>
+  </cdk-virtual-scroll-viewport>
+</ng-template>
+
+<ng-template #headerTpl>
+  <thead
+    dDataTableHead
+    [resizeable]="resizeable"
+    [tableViewRefElement]="tableViewRefElement"
+    [tableBodyEl]="tableBodyEl"
+    [multiSort]="multiSort"
+    [columns]="_columns"
+    [pageAllChecked]="_pageAllChecked"
+    [checkable]="checkable"
+    [checkOptions]="checkOptions"
+    [headerCheckDisabled]="headerCheckDisabled"
+    [headerCheckVisible]="headerCheckVisible"
+    [showExpandToggle]="showExpandToggle"
+    [showSortIcon]="showSortIcon"
+    (resizeHandlerEvent)="onResizeHandler($event)"
+    (headClickSortEvent)="onHandleSort($event)"
+    [halfChecked]="halfChecked"
+    [maxHeight]="maxHeight"
+    (beginResizeHandlerEvent)="beginResizeHandlerEvent($event)"
+    (resizingHandlerEvent)="onResizingFixedHandler($event)"
+    [fixHeader]="fixHeader"
+    (dragTableEndEvent)="handleDragTable($event)"
+    [dataSource]="dataSource"
+    [colDropFreezeTo]="colDropFreezeTo"
+    [colDraggable]="colDraggable"
+    [childrenTableOpen]="childrenTableOpen"
+  ></thead>
+</ng-template>
+<ng-template #HeaderContent><ng-content select="thead"></ng-content></ng-template>

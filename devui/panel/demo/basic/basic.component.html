@@ -1,0 +1,21 @@
+<section>
+  <d-panel [type]="'primary'" #panel [isCollapsed]="isCollapsed">
+    <d-panel-header>
+      Panel with foldable
+      <em
+        class="icon"
+        [ngClass]="{
+          'icon-chevron-up': panel.isCollapsed,
+          'icon-chevron-down': !panel.isCollapsed
+        }"
+      ></em>
+    </d-panel-header>
+    <d-panel-body>This is body</d-panel-body>
+  </d-panel>
+  <br /><br />
+  <d-panel>
+    <d-panel-header>Panel with header and footer</d-panel-header>
+    <d-panel-body>This is body</d-panel-body>
+    <d-panel-footer>This is footer</d-panel-footer>
+  </d-panel>
+</section>

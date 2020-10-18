@@ -3,31 +3,30 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "devui-building-block-theory": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
+    "devui": {
       "root": "",
       "sourceRoot": "src",
+      "projectType": "application",
       "prefix": "app",
+      "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "outputPath": "dist/devui-building-block-theory",
+            "customWebpackConfig": {
+              "path": "scripts/extra-webpack.config.js"
+            },
+            "outputPath": "dist/components",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
-            "aot": true,
+            "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
+              "node_modules/highlight.js/styles/an-old-hope.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -45,88 +44,161 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "3mb",
                   "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
                 }
               ]
+            },
+            "es5": {
+              "tsConfig": "src/tsconfig.app.es5.json"
+            },
+            "separate": {
+              "tsConfig": "src/tsconfig.app.separate.json"
             }
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "devui-building-block-theory:build",
-            "port": 4260
+            "browserTarget": "devui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "devui-building-block-theory:build:production"
+              "browserTarget": "devui:build:production"
+            },
+            "es5": {
+              "browserTarget": "devui:build:es5"
+            },
+            "separate": {
+              "browserTarget": "devui:build:separate"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "devui-building-block-theory:build"
+            "browserTarget": "devui:build"
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
+            "customWebpackConfig": {
+              "path": "scripts/extra-webpack.config.js"
+            },
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
             ]
           }
-        },
+        }
+      }
+    },
+    "devui-e2e": {
+      "root": "e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "devui-building-block-theory:serve"
+            "devServerTarget": "devui:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "devui-building-block-theory:serve:production"
+              "devServerTarget": "devui:serve:production"
             }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "devui-lib": {
+      "root": "devui",
+      "sourceRoot": "devui",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "devui/tsconfig.lib.json",
+            "project": "devui/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "devui/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/custom-webpack:karma",
+          "options": {
+            "customWebpackConfig": {
+              "path": "scripts/extra-webpack.config.js"
+            },
+            "main": "devui/test.ts",
+            "tsConfig": "devui/tsconfig.spec.json",
+            "karmaConfig": "devui/karma.conf.js",
+            "polyfills": "devui/polyfills.ts",
+            "codeCoverage": true,
+            "styles": [
+              "src/styles.scss"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "devui/tsconfig.lib.json",
+              "devui/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "devui-building-block-theory",
+  "defaultProject": "devui",
   "cli": {
     "analytics": false
   }

@@ -1,0 +1,86 @@
+@import '../style/theme/color';
+
+:host {
+  display: block;
+}
+
+.devui-slider {
+  position: relative;
+  width: 100%;
+  padding: 5px 0;
+  margin: 5px 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  height: 15px;
+
+  .devui-slider-rail {
+    position: absolute;
+    background-color: $devui-area;
+    height: 5px;
+    width: 100%;
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 4px;
+
+    &.disabled {
+      background-color: $devui-area;
+    }
+  }
+
+  &:hover {
+    .devui-slider-rail:not(.disabled) {
+      background-color: $devui-area;
+    }
+
+    .devui-slider-track:not(.disabled) {
+      background-color: $devui-brand-hover;
+    }
+
+    .devui-slider-handle:not(.disabled) {
+      border-color: $devui-brand-hover;
+    }
+  }
+
+  .devui-slider-track {
+    position: absolute;
+    background-color: $devui-brand;
+    height: 5px;
+    width: 0;
+    border-radius: 4px;
+  }
+
+  .devui-slider-handle {
+    position: absolute;
+    background-color: $devui-base-bg;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-left: -7px;
+    margin-top: -5px;
+    left: 0;
+    transition: transform 0.2s ease-in-out;
+    border: 2px solid $devui-brand;
+
+    &:not(.disabled) {
+      &:hover,
+      &:active {
+        transform: scale(1.3);
+      }
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+
+    .devui-slider-rail {
+      background-color: $devui-disabled-bg;
+    }
+
+    .devui-slider-track {
+      background-color: $devui-disabled-line;
+    }
+
+    .devui-slider-handle {
+      border-color: $devui-disabled-line;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<section>
+  <d-multi-auto-complete
+    [(ngModel)]="multiItems2"
+    [searchFn]="onSearchMultiple2.bind(this)"
+    [ngModelOptions]="{ updateOn: 'blur' }"
+    [dValidateRules]="[{ minlength: 3, message: '请至少选择三个选项' }]"
+    (autoSubmit)="autoSubmit($event)"
+    name="multiple-auto"
+  >
+  </d-multi-auto-complete>
+  <pre>{{ multiItems2 | json }}</pre>
+</section>

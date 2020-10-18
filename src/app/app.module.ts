@@ -1,13 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ButtonModule } from 'ng-devui';
-import { HeaderModule } from './project-portal/header/header.module';
-import { LeftNavModule } from './project-portal/left-nav/left-nav.module';
-import { MainContentModule } from './project-portal/main-content/main-content.module';
-import { FooterModule } from './project-portal/footer/footer.module';
+
+import { DevUIModule } from 'ng-devui';
+import { ThemePickerModule } from './theme-picker/theme-picker.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,12 +15,27 @@ import { FooterModule } from './project-portal/footer/footer.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    ButtonModule,
-    HeaderModule,
-    LeftNavModule,
-    MainContentModule,
-    FooterModule
+    BrowserAnimationsModule,
+    DevUIModule.forRoot(),
+    FormsModule,
+    ThemePickerModule,
+    RouterModule.forRoot(
+      [
+        {
+          path: '',
+          redirectTo: 'components',
+          pathMatch: 'full'
+        },
+        {
+          path: 'components',
+          loadChildren: () => import('./component/app-content.module').then(m => m.AppContentModule)
+        },
+        {
+          path: '**',
+          redirectTo: 'components'
+        }
+      ]
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]
