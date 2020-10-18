@@ -11,7 +11,7 @@
     "ng": "ng",
     "start": "ng serve --open --configuration es5",
     "start-es6": "ng serve --open",
-    "build": "ng build --prod --deploy-url components/",
+    "build": "ng build --prod --deploy-url components/ && npm run tar",
     "build:separate": "npm run build:devui && ng build --prod --deploy-url components/ --configuration separate  && npm run postbuild",
     "test": "ng test",
     "test:lib": "ng test devui-lib --no-watch --no-progress --browsers=ChromeHeadlessCI",
@@ -27,7 +27,8 @@
     "postbuild:devui": "node scripts/copy-artifacts.js && npm run css-compile && npm run css-minify",
     "css-compile": "node-sass --output-style expanded --precision 6 --importer scripts/node-sass.importer.js ./devui/style/devui.scss ./publish/devui.css",
     "css-minify": "cleancss --format breakWith=lf --output ./publish/devui.min.css ./publish/devui.css",
-    "build:devui:ivy": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build devui-lib"
+    "build:devui:ivy": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build devui-lib",
+    "tar": "node scripts/tar.js"
   },
   "dependencies": {
     "@angular/animations": "~9.1.12",
@@ -95,6 +96,7 @@
     "stylelint-config-recommended-scss": "^4.2.0",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-scss": "^3.17.0",
+    "tar": "^6.0.5",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.8.3"
