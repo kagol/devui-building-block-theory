@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     };
   }
   ngOnInit(): void {
+    console.log('Welcome to use DevUI~');
     this.version = VERSION.full;
     this.versionOptions = [
       { name: this.version, link: '/components/get-start', target: '_self' },
