@@ -28,7 +28,8 @@
     "css-compile": "node-sass --output-style expanded --precision 6 --importer scripts/node-sass.importer.js ./devui/style/devui.scss ./publish/devui.css",
     "css-minify": "cleancss --format breakWith=lf --output ./publish/devui.min.css ./publish/devui.css",
     "build:devui:ivy": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build devui-lib",
-    "tar": "node scripts/tar.js"
+    "tar": "node scripts/tar.js",
+    "build:all": "npm run build && npm run tar"
   },
   "dependencies": {
     "@angular/animations": "~9.1.12",
